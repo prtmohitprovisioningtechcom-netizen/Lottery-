@@ -12,11 +12,6 @@ export default function HomePage() {
       <CheckResultForm />
       <ResultSection />
 
-      <footer className="mt-8 pb-6 text-center text-xs text-white/40">
-        <Link href="/admin/login" className="hover:text-white/70">
-          Admin Login
-        </Link>
-      </footer>
     </main>
   );
 }

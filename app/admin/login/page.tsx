@@ -89,20 +89,8 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-500">
-          New admin?{" "}
-          <Link href="/admin/register" className="font-semibold text-green-700">
-            Register
-          </Link>
-        </p>
-        <p className="mt-2 text-center text-xs text-gray-400">
-          Default: admin@keralalottery.com / admin123
-        </p>
-        <p className="mt-4 text-center">
-          <Link href="/" className="text-xs text-gray-400 hover:text-gray-600">
-            ← Back to Result Page
-          </Link>
-        </p>
+
+
       </div>
     </main>
   );

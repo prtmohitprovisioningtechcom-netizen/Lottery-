@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   description: "Check Kerala Lottery live results and download certificate",
 };
 
+import ScrollBackground from "@/components/ScrollBackground";
+
 export default function RootLayout({
   children,
 }: {
@@ -28,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${playfair.variable} font-sans antialiased`}
       >
+        <ScrollBackground />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
