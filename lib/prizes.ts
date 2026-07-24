@@ -120,8 +120,7 @@ export function positionLabel(rank: number): string {
 /** Generate display tickets like KL120001 for prize grids */
 export function generateFillerTickets(
   rank: number,
-  count: number,
-  highlightTicket?: string
+  count: number
 ): string[] {
   const tickets: string[] = [];
   const base = rank * 10000;
@@ -129,11 +128,6 @@ export function generateFillerTickets(
   for (let i = 1; i <= count; i++) {
     const num = String(base + i).padStart(6, "0");
     tickets.push(`KL${num}`);
-  }
-
-  if (highlightTicket && count > 0) {
-    const idx = Math.min(4, count - 1);
-    tickets[idx] = highlightTicket.toUpperCase();
   }
 
   return tickets;

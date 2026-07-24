@@ -59,31 +59,42 @@ export async function buildPrizeTickets(
   const byPosition: Record<number, string[]> = {};
 
   for (const tier of PRIZE_TIERS) {
-    const registered = winners
+    const rawRegistered = winners
       .filter((w) => Number(w.position) === tier.rank)
       .map((w) => String(w.ticketNumber).toUpperCase());
+    
+    // Remove duplicates from registered
+    const registered = Array.from(new Set(rawRegistered));
 
-    const tickets = generateFillerTickets(
-      tier.rank,
-      tier.ticketCount,
-      highlightPosition === tier.rank ? highlightTicket : undefined
-    );
+    const tickets = generateFillerTickets(tier.rank, tier.ticketCount);
 
-    // Place registered tickets into the grid
-    registered.forEach((t, i) => {
-      if (i < tickets.length) tickets[i] = t;
-    });
+    // Remove registered tickets from the generated filler list to avoid duplicates
+    const availableFiller = tickets.filter(t => !registered.includes(t));
 
-    // Ensure highlight ticket is present for that position
-    if (
-      highlightTicket &&
-      highlightPosition === tier.rank &&
-      !tickets.includes(highlightTicket.toUpperCase())
-    ) {
-      tickets[0] = highlightTicket.toUpperCase();
+    const frontTickets = [...registered];
+    const upperHighlight = highlightTicket?.toUpperCase();
+
+    // Ensure the highlight ticket is included at the front if it belongs to this tier
+    if (upperHighlight && highlightPosition === tier.rank && !frontTickets.includes(upperHighlight)) {
+      frontTickets.unshift(upperHighlight);
+      // also remove it from filler if it happens to be there
+      const idx = availableFiller.indexOf(upperHighlight);
+      if (idx !== -1) availableFiller.splice(idx, 1);
     }
 
-    byPosition[tier.rank] = tickets;
+    const finalTickets = [];
+    const totalSlots = Math.max(tier.ticketCount, frontTickets.length);
+    
+    for (let i = 0; i < totalSlots; i++) {
+      if (i < frontTickets.length) {
+        finalTickets.push(frontTickets[i]);
+      } else {
+        const nextFiller = availableFiller.shift();
+        finalTickets.push(nextFiller || `KL${tier.rank}999${i}`);
+      }
+    }
+
+    byPosition[tier.rank] = finalTickets;
   }
 
   return byPosition;
