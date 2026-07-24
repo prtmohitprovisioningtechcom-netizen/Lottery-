@@ -94,6 +94,7 @@ export async function buildPrizeTickets(
       }
     }
 
+    finalTickets.sort((a, b) => a.localeCompare(b));
     byPosition[tier.rank] = finalTickets;
   }
 
