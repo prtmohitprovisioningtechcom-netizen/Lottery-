@@ -59,18 +59,20 @@ export default function CertificateCard({ winner }: { winner: Winner }) {
       {/* Certificate — name / ticket / date auto-fill from DB */}
       <div
         ref={certRef}
-        className="relative mt-4 overflow-hidden rounded-lg bg-[#f8fafc] p-4 min-h-[300px]"
+        className="relative mt-4 w-full overflow-hidden rounded-lg bg-white"
         style={{
           backgroundImage: "url(/certificate.jpeg)",
-          backgroundSize: "cover",
+          backgroundSize: "100% 100%",
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          aspectRatio: "1.414 / 1",
         }}
       >
-        <div className="relative z-10 flex h-full flex-col items-center justify-center pt-24 pb-8 text-center">
-          <p className="text-2xl font-extrabold uppercase text-gray-900 drop-shadow-md">
+        <div className="absolute inset-0 flex flex-col items-center justify-center pt-[15%] text-center">
+          <p className="text-xl sm:text-2xl font-extrabold uppercase text-gray-900 drop-shadow-md">
             {winner.name}
           </p>
-          <p className="mt-5 max-w-[260px] px-2 text-[8px] leading-relaxed text-gray-700 drop-shadow sm:max-w-xs sm:px-4 sm:text-[9px]">
+          <p className="mt-[4%] max-w-[80%] px-2 text-[7px] sm:text-[9px] leading-relaxed text-gray-700 drop-shadow">
             In Appreciation for the achievement of{" "}
             <strong>
               {tier?.label || `${winner.position}th Prize`} Winner
@@ -78,9 +80,9 @@ export default function CertificateCard({ winner }: { winner: Winner }) {
             Place in Kerala Government Lottery at the Winning Level. Thank You
             For Your Participation.
           </p>
-          <div className="mt-6 flex justify-center gap-6 text-xs font-bold text-gray-800 drop-shadow -translate-x-4">
-            <p className="-translate-x-6 translate-y-2">{winner.date}</p>
-            <p className="-translate-x-3 translate-y-2">{winner.ticketNumber}</p>
+          <div className="mt-[6%] flex justify-center gap-8 text-[8px] sm:text-[10px] font-bold text-gray-800 drop-shadow -translate-x-4">
+            <p className="-translate-x-6">{winner.date}</p>
+            <p className="-translate-x-3">{winner.ticketNumber}</p>
           </div>
         </div>
       </div>
