@@ -254,7 +254,7 @@ export default function AdminDashboardPage() {
               disabled={loading}
               className="w-full rounded-lg bg-green-700 py-3 font-bold text-white hover:bg-green-800 disabled:opacity-60"
             >
-              {loading ? "Saving..." : "Save Winner to Database"}
+              {loading ? "Saving..." : "Save Winner"}
             </button>
           </div>
         </form>
