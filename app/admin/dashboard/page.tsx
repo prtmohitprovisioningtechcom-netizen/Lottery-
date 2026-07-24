@@ -146,7 +146,6 @@ export default function AdminDashboardPage() {
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="SATYA BHAWANI"
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-green-600"
               required
             />
@@ -160,12 +159,8 @@ export default function AdminDashboardPage() {
               type="tel"
               value={form.mobile}
               onChange={(e) =>
-                setForm({
-                  ...form,
-                  mobile: e.target.value.replace(/\D/g, "").slice(0, 10),
-                })
+                setForm({ ...form, mobile: e.target.value.replace(/\D/g, "").slice(0, 10) })
               }
-              placeholder="9876543210"
               maxLength={10}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-green-600"
               required
