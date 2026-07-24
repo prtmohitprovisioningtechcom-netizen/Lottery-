@@ -137,9 +137,6 @@ export default function AdminDashboardPage() {
         <h2 className="text-lg font-bold text-green-800">
           Register Winner
         </h2>
-        <p className="mt-1 text-sm text-gray-500">
-          Name, Mobile, Position, Ticket Number, Date — saved to MongoDB
-        </p>
 
         <form onSubmit={onSubmit} className="mt-5 grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
