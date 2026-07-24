@@ -173,12 +173,7 @@ export default function AdminDashboardPage() {
             </label>
             <select
               value={form.position}
-              onChange={(e) => {
-                const newPos = e.target.value;
-                const tier = getPrizeTier(Number(newPos));
-                const tickets = tier ? generateFillerTickets(tier.rank, tier.ticketCount) : [];
-                setForm({ ...form, position: newPos, ticketNumber: tickets[0] || "" });
-              }}
+              onChange={(e) => setForm({ ...form, position: e.target.value })}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-green-600"
               required
             >
@@ -194,22 +189,15 @@ export default function AdminDashboardPage() {
             <label className="mb-1 block text-sm font-medium text-gray-700">
               Ticket Number
             </label>
-            <select
+            <input
               value={form.ticketNumber}
-              onChange={(e) => setForm({ ...form, ticketNumber: e.target.value })}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 font-mono outline-none focus:border-green-600"
+              onChange={(e) =>
+                setForm({ ...form, ticketNumber: e.target.value.toUpperCase() })
+              }
+              placeholder="KL50001"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 font-mono uppercase outline-none focus:border-green-600"
               required
-            >
-              {(() => {
-                const tier = getPrizeTier(Number(form.position));
-                const tickets = tier ? generateFillerTickets(tier.rank, tier.ticketCount) : [];
-                return tickets.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ));
-              })()}
-            </select>
+            />
           </div>
 
           <div>

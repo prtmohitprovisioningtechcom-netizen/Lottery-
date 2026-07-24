@@ -68,32 +68,21 @@ export async function buildPrizeTickets(
 
     const tickets = generateFillerTickets(tier.rank, tier.ticketCount);
 
-    // Remove registered tickets from the generated filler list to avoid duplicates
-    const availableFiller = tickets.filter(t => !registered.includes(t));
-
-    const frontTickets = [...registered];
-    const upperHighlight = highlightTicket?.toUpperCase();
-
-    // Ensure the highlight ticket is included at the front if it belongs to this tier
-    if (upperHighlight && highlightPosition === tier.rank && !frontTickets.includes(upperHighlight)) {
-      frontTickets.unshift(upperHighlight);
-      // also remove it from filler if it happens to be there
-      const idx = availableFiller.indexOf(upperHighlight);
-      if (idx !== -1) availableFiller.splice(idx, 1);
-    }
-
-    const finalTickets = [];
-    const totalSlots = Math.max(tier.ticketCount, frontTickets.length);
+    const finalTicketsSet = new Set<string>();
     
-    for (let i = 0; i < totalSlots; i++) {
-      if (i < frontTickets.length) {
-        finalTickets.push(frontTickets[i]);
-      } else {
-        const nextFiller = availableFiller.shift();
-        finalTickets.push(nextFiller || `KL${tier.rank}999${i}`);
-      }
+    // 1. Add all standard filler tickets so they always remain
+    tickets.forEach(t => finalTicketsSet.add(t));
+    
+    // 2. Add all registered tickets (new numbers get appended)
+    registered.forEach(t => finalTicketsSet.add(t));
+    
+    // 3. Ensure highlight ticket is also present
+    const upperHighlight = highlightTicket?.toUpperCase();
+    if (upperHighlight && highlightPosition === tier.rank) {
+      finalTicketsSet.add(upperHighlight);
     }
-
+    
+    const finalTickets = Array.from(finalTicketsSet);
     finalTickets.sort((a, b) => a.localeCompare(b));
     byPosition[tier.rank] = finalTickets;
   }
