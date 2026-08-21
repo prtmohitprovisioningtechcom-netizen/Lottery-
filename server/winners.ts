@@ -132,4 +132,17 @@ export async function ensureDefaultAdmin() {
   }
 }
 
+export async function changeAdminPassword(adminId: string, oldPass: string, newPass: string) {
+  await connectDB();
+  const admin = await Admin.findById(adminId);
+  if (!admin) throw new Error("Admin not found");
+  
+  const ok = await bcrypt.compare(oldPass, admin.password);
+  if (!ok) throw new Error("Incorrect old password");
+  
+  const hashed = await bcrypt.hash(newPass, 10);
+  admin.password = hashed;
+  await admin.save();
+}
+
 export { getPrizeTier };

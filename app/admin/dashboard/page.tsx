@@ -29,6 +29,16 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [pwdForm, setPwdForm] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [pwdMessage, setPwdMessage] = useState("");
+  const [pwdError, setPwdError] = useState("");
+  const [pwdLoading, setPwdLoading] = useState(false);
+  const [showPwdModal, setShowPwdModal] = useState(false);
+
   useEffect(() => {
     if (ready && !isAuthenticated) {
       router.replace("/admin/login");
@@ -98,6 +108,46 @@ export default function AdminDashboardPage() {
     await loadWinners();
   }
 
+  async function onPwdSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (pwdForm.newPassword !== pwdForm.confirmPassword) {
+      setPwdError("New passwords do not match");
+      return;
+    }
+    setPwdLoading(true);
+    setPwdError("");
+    setPwdMessage("");
+
+    try {
+      const res = await fetch("/api/admin/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          oldPassword: pwdForm.oldPassword,
+          newPassword: pwdForm.newPassword,
+        }),
+      });
+      const data = await res.json();
+      if (!data.success) {
+        setPwdError(data.message || "Failed to change password");
+      } else {
+        setPwdMessage("Password changed successfully!");
+        setPwdForm({ oldPassword: "", newPassword: "", confirmPassword: "" });
+        setTimeout(() => {
+          setShowPwdModal(false);
+          setPwdMessage("");
+        }, 1500);
+      }
+    } catch {
+      setPwdError("Network error");
+    } finally {
+      setPwdLoading(false);
+    }
+  }
+
   if (!ready || !isAuthenticated) {
     return (
       <main className="flex min-h-screen items-center justify-center text-white">
@@ -120,6 +170,13 @@ export default function AdminDashboardPage() {
           >
             View Site
           </Link>
+          <button
+            type="button"
+            onClick={() => setShowPwdModal(true)}
+            className="rounded-lg bg-blue-600/80 px-3 py-2 text-sm text-white hover:bg-blue-600"
+          >
+            Change Password
+          </button>
           <button
             type="button"
             onClick={() => {
@@ -286,6 +343,71 @@ export default function AdminDashboardPage() {
           </table>
         </div>
       </div>
+
+      {showPwdModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <h2 className="mb-4 text-xl font-bold text-gray-800">Change Password</h2>
+            <form onSubmit={onPwdSubmit} className="flex flex-col gap-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Old Password</label>
+                <input
+                  type="password"
+                  value={pwdForm.oldPassword}
+                  onChange={(e) => setPwdForm({ ...pwdForm, oldPassword: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-600"
+                  required
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">New Password</label>
+                <input
+                  type="password"
+                  value={pwdForm.newPassword}
+                  onChange={(e) => setPwdForm({ ...pwdForm, newPassword: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-600"
+                  required
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Confirm New Password</label>
+                <input
+                  type="password"
+                  value={pwdForm.confirmPassword}
+                  onChange={(e) => setPwdForm({ ...pwdForm, confirmPassword: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-600"
+                  required
+                />
+              </div>
+
+              {pwdError && <p className="text-sm text-red-600">{pwdError}</p>}
+              {pwdMessage && <p className="text-sm text-green-600">{pwdMessage}</p>}
+
+              <div className="mt-2 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPwdModal(false);
+                    setPwdError("");
+                    setPwdMessage("");
+                    setPwdForm({ oldPassword: "", newPassword: "", confirmPassword: "" });
+                  }}
+                  className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={pwdLoading}
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-60"
+                >
+                  {pwdLoading ? "Saving..." : "Change Password"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
