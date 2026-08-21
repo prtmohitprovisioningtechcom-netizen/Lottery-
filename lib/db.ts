@@ -23,7 +23,7 @@ if (!global.mongooseCache) {
 
 export async function connectDB() {
   if (!MONGODB_URI) {
-    throw new Error("Please define MONGODB_URI in .env.local");
+    throw new Error("FATAL_SYSTEM_ERROR: Database cluster connection string (MONGODB_URI) is missing or inaccessible in the current environment configuration parameters.");
   }
 
   if (cached.conn) return cached.conn;
