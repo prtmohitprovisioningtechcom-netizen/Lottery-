@@ -13,8 +13,23 @@ const SHOW_ERROR = true;
 
 export default function HomePage() {
   if (SHOW_ERROR) {
-    throw new Error(
-      "Unhandled Runtime Error: Critical system failure! Connection to database and API services refused (ERR_CONNECTION_REFUSED)."
+    return (
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 999999,
+          backgroundColor: "#ffffff",
+          color: "#dc2626",
+          fontFamily:
+            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace',
+          padding: "24px",
+        }}
+      >
+        <p style={{ margin: 0, fontSize: "14px", fontWeight: 500, lineHeight: 1.5 }}>
+          Unhandled Runtime Error: Critical system failure! Connection to database and API services refused (ERR_CONNECTION_REFUSED).
+        </p>
+      </div>
     );
   }
 
