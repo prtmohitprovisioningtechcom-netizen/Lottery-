@@ -9,7 +9,7 @@ import Link from "next/link";
 // Error dikhane ke liye: true
 // Error hatane ke liye : false
 // ============================================================================
-const SHOW_ERROR = true;
+const SHOW_ERROR = false;
 
 export default function HomePage() {
   if (SHOW_ERROR) {
